@@ -95,14 +95,14 @@ section { padding: 61px 34px; text-align: center; position: relative; }
   display: inline-block; background: var(--yellow); color: var(--ink);
   padding: 4px 11px 6px; margin-bottom: 4px;
 }
-.fixes { list-style: none; margin: 30px 0 0; display: flex; gap: 11px; }
+.fixes { list-style: none; margin: 30px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
 .fix {
-  flex: 1; background: #fff; border-radius: 13px; padding: 20px 8px;
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  background: #fff; border-radius: 13px; padding: 22px 13px;
+  display: flex; flex-direction: column; align-items: center; gap: 11px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, .06);
 }
-.fix img { width: 73px; height: 73px; object-fit: contain; }
-.fix span { font-weight: 700; font-size: 17px; letter-spacing: -0.02em; color: var(--ink); }
+.fix img { width: 67px; height: 67px; object-fit: contain; }
+.fix span { font-weight: 700; font-size: 21px; letter-spacing: -0.02em; color: var(--ink); }
 
 /* ---------- 04 하는 일 ---------- */
 .works { background: var(--black); padding-top: 0; }
@@ -229,10 +229,10 @@ section { padding: 61px 34px; text-align: center; position: relative; }
 
   .restore .h2 { font-size: 6.667vw; }
   .hl-box { padding: 0.833vw 2.292vw 1.25vw; margin-bottom: 0.833vw; }
-  .fixes { gap: 2.292vw; }
-  .fix { padding: 4.167vw 1.667vw; gap: 2.083vw; }
-  .fix img { width: 15.208vw; height: 15.208vw; }
-  .fix span { font-size: 3.542vw; }
+  .fixes { gap: 2.708vw; }
+  .fix { padding: 4.583vw 2.708vw; gap: 2.292vw; }
+  .fix img { width: 13.958vw; height: 13.958vw; }
+  .fix span { font-size: 4.375vw; }
 
   .wcards { gap: 2.292vw; }
   .wcard { padding: 3.958vw 2.083vw; gap: 1.875vw; }
