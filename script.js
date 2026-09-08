@@ -85,7 +85,7 @@
   var timer = null;
   var resumeTimer = null;
   var inView = false;
-  var DELAY = 3500;
+  var DELAY = 1200;
   var RESUME_AFTER = 6000;
 
   var dots = [];
