@@ -52,14 +52,17 @@ section { padding: 61px 34px; text-align: center; position: relative; }
   display: block; width: 100%; text-decoration: none; text-align: center;
   background: var(--yellow); color: var(--ink);
   font-weight: 800; font-size: 22px; letter-spacing: -0.02em;
-  padding: 19px 0 20px; border-radius: 15px; margin-top: 34px;
+  padding: 19px 0 20px; border-radius: 15px; margin-top: 0;
   transition: transform .12s ease, box-shadow .12s ease;
   box-shadow: 0 10px 30px rgba(255, 214, 0, .18);
 }
 .cta:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(255, 214, 0, .28); }
 .cta:active { transform: translateY(0); }
-.cta__note { font-weight: 400; font-size: 15px; color: var(--grey-d); margin-top: 12px; letter-spacing: -0.02em; }
-.cta__note.dk { color: var(--ink-sub); }
+.cta__note {
+  font-weight: 700; font-size: 16px; letter-spacing: -0.02em;
+  color: var(--white); margin: 34px 0 12px;
+}
+.cta__note.dk { color: #000; }
 
 /* ---------- 01 히어로 ---------- */
 .hero { background: var(--black); padding-top: 0; padding-bottom: 56px; }
@@ -161,8 +164,9 @@ section { padding: 61px 34px; text-align: center; position: relative; }
 
 /* ---------- 07 상담 안내 ---------- */
 .final { background: var(--deep); padding-top: 0; padding-bottom: 67px; }
-.final .kicker { margin-top: 47px; }
-.cta--lg { font-size: 27px; padding: 22px 0 23px; border-radius: 17px; }
+.final .h2 { margin-top: 56px; }
+.final .cta__note { margin: 11px 0 0; }
+.cta--lg { font-size: 27px; padding: 22px 0 23px; border-radius: 17px; margin-top: 34px; }
 .final__tel { display: block; font-weight: 900; font-size: 31px; letter-spacing: 0; color: var(--white); text-decoration: none; margin-top: 17px; }
 
 /* ---------- 08 하단 정보 ---------- */
@@ -203,8 +207,11 @@ section { padding: 61px 34px; text-align: center; position: relative; }
   .kicker, .hero__eyebrow { font-size: 3.958vw; }
   .h2 { font-size: 7.5vw; }
   .sub, .hero__sub { font-size: 3.542vw; }
-  .cta { font-size: 4.583vw; padding: 3.958vw 0 4.167vw; }
-  .cta__note { font-size: 3.125vw; }
+  .cta { font-size: 4.583vw; padding: 3.958vw 0 4.167vw; margin-top: 0; }
+  .cta__note { font-size: 3.333vw; margin: 7.083vw 0 2.5vw; }
+  .final .h2 { margin-top: 11.667vw; }
+  .final .cta__note { margin: 2.292vw 0 0; }
+  .cta--lg { margin-top: 7.083vw; }
 
   .hero__title { font-size: 8.75vw; }
   .hero__badge { font-size: 3.125vw; padding: 1.25vw 3.125vw 1.458vw; }
