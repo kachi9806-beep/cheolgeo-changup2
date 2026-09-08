@@ -79,9 +79,14 @@
 
   var prev = slider.querySelector(".slider__arw--prev");
   var next = slider.querySelector(".slider__arw--next");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+
   var current = 0;
   var timer = null;
-  var DELAY = 4000;
+  var resumeTimer = null;
+  var inView = false;
+  var DELAY = 3500;
+  var RESUME_AFTER = 6000;
 
   var dots = [];
   for (var i = 0; i < n; i++) {
@@ -96,21 +101,39 @@
     dots.push(b);
   }
 
-  function goTo(idx, smooth) {
-    current = (idx + n) % n;
-    track.scrollTo({
-      left: slides[current].offsetLeft,
-      behavior: smooth === false ? "auto" : "smooth"
-    });
-    paint();
-  }
-
   function paint() {
     for (var k = 0; k < n; k++) {
       dots[k].setAttribute("aria-selected", k === current ? "true" : "false");
     }
-    prev.disabled = current === 0;
-    next.disabled = current === n - 1;
+  }
+
+  function goTo(idx) {
+    var target = (idx + n) % n;
+    // 마지막에서 처음으로 돌아갈 때 8칸을 훑고 지나가면 어지럽다. 즉시 이동한다
+    var wrapping = Math.abs(target - current) > 1;
+    current = target;
+    track.scrollTo({
+      left: slides[current].offsetLeft,
+      behavior: wrapping ? "auto" : "smooth"
+    });
+    paint();
+  }
+
+  function play() {
+    if (timer || !inView || reduce.matches || document.hidden) return;
+    timer = setInterval(function () { goTo(current + 1); }, DELAY);
+  }
+
+  function pause() {
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+
+  // 손대면 잠시 멈췄다가 다시 돈다. 페이지를 스크롤하다 사진에 손이 닿는 것만으로
+  // 영구 정지시키면 대부분의 방문자가 자동 넘김을 한 번도 못 본다
+  function pauseAndResume() {
+    pause();
+    if (resumeTimer) clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(play, RESUME_AFTER);
   }
 
   // 스크롤 위치로 현재 인덱스 역산 (스와이프 대응)
@@ -127,39 +150,32 @@
   dotsBox.addEventListener("click", function (e) {
     var t = e.target;
     if (!t.dataset || t.dataset.idx === undefined) return;
-    stop();
+    pauseAndResume();
     goTo(Number(t.dataset.idx));
   });
 
-  prev.addEventListener("click", function () { stop(); goTo(current - 1); });
-  next.addEventListener("click", function () { stop(); goTo(current + 1); });
+  prev.addEventListener("click", function () { pauseAndResume(); goTo(current - 1); });
+  next.addEventListener("click", function () { pauseAndResume(); goTo(current + 1); });
 
-  function start() {
-    if (timer) return;
-    timer = setInterval(function () { goTo(current + 1); }, DELAY);
-  }
+  // 사진을 직접 만질 때만 멈춘다. wheel 과 keydown 은 페이지 스크롤에도 걸려 제외한다
+  track.addEventListener("pointerdown", pauseAndResume, { passive: true });
 
-  function stop() {
-    if (!timer) return;
-    clearInterval(timer);
-    timer = null;
-  }
+  // 마우스를 올리면 읽는 중이므로 멈추고, 벗어나면 다시 돈다
+  slider.addEventListener("mouseenter", pause);
+  slider.addEventListener("mouseleave", play);
 
-  // 사용자가 손대면 자동 넘김을 멈추고 다시 켜지 않는다
-  ["pointerdown", "touchstart", "wheel", "keydown"].forEach(function (ev) {
-    slider.addEventListener(ev, stop, { passive: true, once: true });
-  });
-
-  // 탭이 가려지면 돌리지 않는다
   document.addEventListener("visibilitychange", function () {
-    if (document.hidden) stop();
+    if (document.hidden) pause(); else play();
   });
 
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-  if (!reduce.matches && "IntersectionObserver" in window) {
+  if ("IntersectionObserver" in window) {
     new IntersectionObserver(function (e) {
-      if (e[0].isIntersecting) start(); else stop();
-    }, { threshold: 0.4 }).observe(slider);
+      inView = e[0].isIntersecting;
+      if (inView) play(); else pause();
+    }, { threshold: 0.35 }).observe(slider);
+  } else {
+    inView = true;
+    play();
   }
 
   paint();
